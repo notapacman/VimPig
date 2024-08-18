@@ -7,6 +7,12 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>pig.ico</ApplicationIcon>
+    <Copyright>Pig Inc.</Copyright>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="pig.ico" />
+  </ItemGroup>
 
 </Project>

@@ -14,3 +14,4 @@ C:\Users\pig\source\repos\VimPig\VimPig\obj\Debug\net8.0-windows\refint\VimPig.d
 C:\Users\pig\source\repos\VimPig\VimPig\obj\Debug\net8.0-windows\VimPig.pdb
 C:\Users\pig\source\repos\VimPig\VimPig\obj\Debug\net8.0-windows\VimPig.genruntimeconfig.cache
 C:\Users\pig\source\repos\VimPig\VimPig\obj\Debug\net8.0-windows\ref\VimPig.dll
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Debug\net8.0-windows\VimPig.Help.resources

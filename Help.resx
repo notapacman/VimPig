@@ -117,6 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label2.Text" xml:space="preserve">
+    <value>:w — Save the current file. If no file was opened, you will be prompted to choose a location to save.
+:q — Close the application.
+:wq — Save the current file and close the application.
+:e &lt;file_path&gt; — Open the file at the specified path.
+:dd — Delete the current line.
+:yy — Copy the current line to the clipboard.
+:gg — Go to the beginning of the file.
+:G — Go to the end of the file.
+/:&lt;search&gt; — Start searching for text.
+:r &lt;search&gt; &lt;replace&gt; — Replace text in the document.
+:s &lt;position&gt; — Split the line at the specified position.</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

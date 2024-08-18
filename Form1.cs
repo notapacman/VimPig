@@ -1,4 +1,6 @@
-﻿namespace VimPig
+﻿using System.Drawing.Drawing2D;
+
+namespace VimPig
 {
     public partial class Form1 : Form
     {
@@ -12,6 +14,72 @@
         {
             InitializeComponent();
             UpdateStatus();
+            textBox1.Resize += (sender, e) =>
+            {
+                SetRoundedShape(textBox1, 15);
+            };
+
+            // Устанавливаем начальную форму при создании
+            SetRoundedShape(textBox1, 15);
+            panel1.Paint += (sender, e) =>
+            {
+                using (GraphicsPath path = new GraphicsPath())
+                {
+                    // Çàäàíèå ðàäèóñà çàêðóãëåíèÿ
+                    int radius = 20;
+
+                    // Ñîçäàíèå ïðÿìîóãîëüíèêà ñ çàêðóãëåííûìè óãëàìè
+                    path.StartFigure();
+                    path.AddArc(0, 0, radius, radius, 180, 90);
+                    path.AddArc(panel1.Width - radius, 0, radius, radius, 270, 90);
+                    path.AddArc(panel1.Width - radius, panel1.Height - radius, radius, radius, 0, 90);
+                    path.AddArc(0, panel1.Height - radius, radius, radius, 90, 90);
+                    path.CloseFigure();
+
+                    // Ïðèìåíåíèå îáðåçêè
+                    panel1.Region = new Region(path);
+                }
+            };
+            panel2.Paint += (sender, e) =>
+            {
+                using (GraphicsPath path = new GraphicsPath())
+                {
+                    // Çàäàíèå ðàäèóñà çàêðóãëåíèÿ
+                    int radius = 20;
+
+                    // Ñîçäàíèå ïðÿìîóãîëüíèêà ñ çàêðóãëåííûìè óãëàìè
+                    path.StartFigure();
+                    path.AddArc(0, 0, radius, radius, 180, 90);
+                    path.AddArc(panel2.Width - radius, 0, radius, radius, 270, 90);
+                    path.AddArc(panel2.Width - radius, panel2.Height - radius, radius, radius, 0, 90);
+                    path.AddArc(0, panel2.Height - radius, radius, radius, 90, 90);
+                    path.CloseFigure();
+
+                    // Ïðèìåíåíèå îáðåçêè
+                    panel2.Region = new Region(path);
+                }
+            };
+            commandTextBox.Resize += (sender, e) =>
+            {
+                SetRoundedShape(commandTextBox, 12);
+            };
+
+            // Устанавливаем начальную форму при создании
+            SetRoundedShape(commandTextBox, 12);
+        }
+        private void SetRoundedShape(Control control, int radius)
+        {
+            using (GraphicsPath path = new GraphicsPath())
+            {
+                path.StartFigure();
+                path.AddArc(0, 0, radius, radius, 180, 90);
+                path.AddArc(control.Width - radius, 0, radius, radius, 270, 90);
+                path.AddArc(control.Width - radius, control.Height - radius, radius, radius, 0, 90);
+                path.AddArc(0, control.Height - radius, radius, radius, 90, 90);
+                path.CloseFigure();
+
+                control.Region = new Region(path);
+            }
         }
 
         private void Scintilla_KeyDown(object sender, KeyEventArgs e)
@@ -19,6 +87,13 @@
             if (e.Control && e.KeyCode == Keys.O)
             {
                 ToggleCommandMode();
+                e.SuppressKeyPress = true;
+                return;
+            }
+            if (e.Control && e.KeyCode == Keys.P)
+            {
+                Help help = new Help();
+                help.Show();
                 e.SuppressKeyPress = true;
                 return;
             }
@@ -249,7 +324,7 @@
             int wordCount = textBox1.Text.Split(new[] { ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries).Length;
             int lineCount = textBox1.Lines.Length;
 
-            statusLabel.Text = $"Words: {wordCount} | Lines: {lineCount}";
+            label1.Text = $"Words: {wordCount} | Lines: {lineCount}";
         }
     }
 }
