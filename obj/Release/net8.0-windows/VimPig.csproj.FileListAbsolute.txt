@@ -15,3 +15,7 @@ C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\refint\VimPig
 C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.pdb
 C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.genruntimeconfig.cache
 C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\ref\VimPig.dll
+C:\Users\pig\source\repos\VimPig\VimPig\bin\Release\net8.0-windows\DiscordRPC.dll
+C:\Users\pig\source\repos\VimPig\VimPig\bin\Release\net8.0-windows\Newtonsoft.Json.dll
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.csproj.AssemblyReference.cache
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.csproj.Up2Date

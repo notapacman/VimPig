@@ -5,7 +5,7 @@ namespace VimPig
     public partial class Form1 : Form
     {
         private string currentFilePath = string.Empty; // Путь к открытому файлу
-        private bool isCommandMode = false; // Режим командной строки
+        public static bool isCommandMode = false; // Режим командной строки
         private string lastSearchTerm = string.Empty; // Последний поисковый запрос
         private int currentClipboardLine = -1; // Хранит последнюю скопированную строку
         private int lastLineIndex = 0; // Хранит индекс строки перед открытием командной строки
@@ -38,6 +38,25 @@ namespace VimPig
 
                     // Ïðèìåíåíèå îáðåçêè
                     panel1.Region = new Region(path);
+                }
+            };
+            panel3.Paint += (sender, e) =>
+            {
+                using (GraphicsPath path = new GraphicsPath())
+                {
+                    // Çàäàíèå ðàäèóñà çàêðóãëåíèÿ
+                    int radius = 20;
+
+                    // Ñîçäàíèå ïðÿìîóãîëüíèêà ñ çàêðóãëåííûìè óãëàìè
+                    path.StartFigure();
+                    path.AddArc(0, 0, radius, radius, 180, 90);
+                    path.AddArc(panel3.Width - radius, 0, radius, radius, 270, 90);
+                    path.AddArc(panel3.Width - radius, panel3.Height - radius, radius, radius, 0, 90);
+                    path.AddArc(0, panel3.Height - radius, radius, radius, 90, 90);
+                    path.CloseFigure();
+
+                    // Ïðèìåíåíèå îáðåçêè
+                    panel3.Region = new Region(path);
                 }
             };
             panel2.Paint += (sender, e) =>
@@ -87,6 +106,7 @@ namespace VimPig
             if (e.Control && e.KeyCode == Keys.O)
             {
                 ToggleCommandMode();
+
                 e.SuppressKeyPress = true;
                 return;
             }
@@ -94,6 +114,7 @@ namespace VimPig
             {
                 Help help = new Help();
                 help.Show();
+                UpdateStattohelp();
                 e.SuppressKeyPress = true;
                 return;
             }
@@ -108,12 +129,26 @@ namespace VimPig
 
 
             UpdateStatus();
+
+        }
+        private void UpdateStattocomm()
+        {
+            RPC.SetState("Writing Commands..", true);
+        }
+        public void UpdateStattodef()
+        {
+            RPC.SetState("Editing..", true);
+        }
+        private void UpdateStattohelp()
+        {
+            RPC.SetState("Looking for help by commands", true);
         }
 
         private void ToggleCommandMode()
         {
             if (isCommandMode)
             {
+                UpdateStattodef();
                 // Save the current line before hiding command box
                 lastLineIndex = textBox1.GetLineFromCharIndex(textBox1.SelectionStart);
             }
@@ -123,6 +158,7 @@ namespace VimPig
 
             if (isCommandMode)
             {
+                UpdateStattocomm();
                 commandTextBox.Focus();
 
                 // Проверка на существование строки и корректность индекса
@@ -169,8 +205,31 @@ namespace VimPig
             }
             else if (command.StartsWith(":e "))
             {
-                OpenSpecificFile(command.Substring(3));
+                // Получаем путь к файлу, начиная с 3-го символа, и удаляем лишние пробелы.
+                string filePath = command.Substring(4).Trim();
+
+                // Проверка, есть ли аргумент после ":e ".
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    try
+                    {
+                        // Открываем указанный файл.
+                        OpenSpecificFile(filePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Если произошла ошибка при открытии файла, отображаем сообщение с описанием ошибки.
+                        MessageBox.Show($"Failed to open file: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    // Если аргумент не указан, отображаем сообщение о необходимости указания пути к файлу.
+                    MessageBox.Show("Error: Missing file path. Please provide a valid file path after the :e command.");
+                }
             }
+
+
             else if (command == ":dd")
             {
                 DeleteCurrentLine();
@@ -197,7 +256,7 @@ namespace VimPig
             }
             else
             {
-                MessageBox.Show("Unknown command: " + command);
+                MessageBox.Show("Unknown command or not enought arguments: " + command);
             }
         }
 
@@ -325,6 +384,11 @@ namespace VimPig
             int lineCount = textBox1.Lines.Length;
 
             label1.Text = $"Words: {wordCount} | Lines: {lineCount}";
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

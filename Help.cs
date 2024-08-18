@@ -41,8 +41,19 @@ namespace VimPig
             if (e.Control && e.KeyCode == Keys.E)
             {
                 this.Close();
+                UpdateStattodef();
                 e.SuppressKeyPress = true;
                 return;
+            }
+        }
+        public void UpdateStattodef()
+        {
+            if (Form1.isCommandMode)
+            {
+                RPC.SetState("Writing Commands..", true);
+            } else
+            {
+                RPC.SetState("Editing..", true);
             }
         }
     }
