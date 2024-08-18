@@ -20,6 +20,10 @@ VimPig is a simple text editor inspired by Vim. It allows text editing using key
 - `/:<search`> — Start searching for text.
 - `:r <search> <replace>` — Replace text in the document.
 - `:s <position>` — Split the line at the specified position.
+# Hotkeys
+- `Ctrl + P` - open Editor Help
+- `Ctrl + E (in editor help)` - close editor help
+- `Ctrl + O` - open command line
 # Usage
 1. Running the Application:
    - Compile the project and run the executable file. The text editor will open.
