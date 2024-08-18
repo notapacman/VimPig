@@ -1,0 +1,17 @@
+C:\Users\pig\source\repos\VimPig\VimPig\bin\Release\net8.0-windows\VimPig.exe
+C:\Users\pig\source\repos\VimPig\VimPig\bin\Release\net8.0-windows\VimPig.deps.json
+C:\Users\pig\source\repos\VimPig\VimPig\bin\Release\net8.0-windows\VimPig.runtimeconfig.json
+C:\Users\pig\source\repos\VimPig\VimPig\bin\Release\net8.0-windows\VimPig.dll
+C:\Users\pig\source\repos\VimPig\VimPig\bin\Release\net8.0-windows\VimPig.pdb
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.Form1.resources
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.Help.resources
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.csproj.GenerateResource.cache
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.AssemblyInfoInputs.cache
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.AssemblyInfo.cs
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.csproj.CoreCompileInputs.cache
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.dll
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\refint\VimPig.dll
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.pdb
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\VimPig.genruntimeconfig.cache
+C:\Users\pig\source\repos\VimPig\VimPig\obj\Release\net8.0-windows\ref\VimPig.dll

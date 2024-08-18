@@ -19,8 +19,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             commandTextBox = new TextBox();
             panel1 = new Panel();
-            label1 = new Label();
             textBox1 = new TextBox();
+            label1 = new Label();
             panel2 = new Panel();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -48,17 +48,6 @@
             panel1.Size = new Size(909, 456);
             panel1.TabIndex = 4;
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 12F);
-            label1.ForeColor = SystemColors.Control;
-            label1.Location = new Point(759, 5);
-            label1.Name = "label1";
-            label1.Size = new Size(135, 21);
-            label1.TabIndex = 1;
-            label1.Text = "Words: 0 | Lines: 0";
-            // 
             // textBox1
             // 
             textBox1.BackColor = Color.FromArgb(64, 64, 64);
@@ -71,6 +60,17 @@
             textBox1.Size = new Size(881, 432);
             textBox1.TabIndex = 0;
             textBox1.KeyDown += Scintilla_KeyDown;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 12F);
+            label1.ForeColor = SystemColors.Control;
+            label1.Location = new Point(759, 5);
+            label1.Name = "label1";
+            label1.Size = new Size(135, 21);
+            label1.TabIndex = 1;
+            label1.Text = "Words: 0 | Lines: 0";
             // 
             // panel2
             // 
