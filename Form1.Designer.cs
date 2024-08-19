@@ -33,10 +33,10 @@
             commandTextBox.BackColor = Color.FromArgb(30, 30, 30);
             commandTextBox.BorderStyle = BorderStyle.None;
             commandTextBox.ForeColor = SystemColors.Window;
-            commandTextBox.Location = new Point(4, 9);
+            commandTextBox.Location = new Point(34, 9);
             commandTextBox.Margin = new Padding(4, 3, 4, 3);
             commandTextBox.Name = "commandTextBox";
-            commandTextBox.Size = new Size(901, 16);
+            commandTextBox.Size = new Size(260, 16);
             commandTextBox.TabIndex = 1;
             commandTextBox.Visible = false;
             commandTextBox.KeyDown += Scintilla_KeyDown;
@@ -68,9 +68,9 @@
             // 
             panel2.BackColor = Color.FromArgb(45, 45, 45);
             panel2.Controls.Add(commandTextBox);
-            panel2.Location = new Point(12, 474);
+            panel2.Location = new Point(291, 474);
             panel2.Name = "panel2";
-            panel2.Size = new Size(909, 33);
+            panel2.Size = new Size(329, 33);
             panel2.TabIndex = 5;
             // 
             // panel3

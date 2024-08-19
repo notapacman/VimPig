@@ -118,17 +118,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label2.Text" xml:space="preserve">
-    <value>:w — Save the current file. If no file was opened, you will be prompted to choose a location to save.
-:q — Close the application.
-:wq — Save the current file and close the application.
-:e &lt;file_path&gt; — Open the file at the specified path.
-:dd — Delete the current line.
-:yy — Copy the current line to the clipboard.
-:gg — Go to the beginning of the file.
-:G — Go to the end of the file.
-/:&lt;search&gt; — Start searching for text.
-:r &lt;search&gt; &lt;replace&gt; — Replace text in the document.
-:s &lt;position&gt; — Split the line at the specified position.</value>
+    <value>:w - Save the current file. If no file was opened, you will be prompted to choose a location to save.
+:q - Close the application.
+:wq - Save the current file and then close the application.
+:e - Open a file dialog for selecting a file to open.
+:delete &lt;lineNumber&gt; - Delete the specified line. Replace &lt;lineNumber&gt; with the line number you wish to delete.
+:script - Open a file dialog to select a script file and execute its commands sequentially.
+:history - Display the command history in a message box.
+:shell &lt;command&gt; - Execute the specified shell command and display the output.
+:uppercase &lt;lineNumber&gt; - Convert the specified line to uppercase. Replace &lt;lineNumber&gt; with the line number.
+:clear - Clear all text in the editor.
+:lowercase &lt;lineNumber&gt; - Convert the specified line to lowercase. Replace &lt;lineNumber&gt; with the line number.
+:copy &lt;lineNumber&gt; - Copy the specified line to the clipboard. Replace &lt;lineNumber&gt; with the line number.
+:dd - Delete the current line.
+:yy - Copy the current line to the clipboard.
+:gg - Move the cursor to the beginning of the text.
+:G - Move the cursor to the end of the text.
+:uncomment &lt;lineNumber&gt; - Remove comments from the specified line. Replace &lt;lineNumber&gt; with the line number.
+:comment &lt;lineNumber&gt; - Add comments to the specified line. Replace &lt;lineNumber&gt; with the line number.
+:move &lt;sourceLine&gt; &lt;destLine&gt; - Move a line from sourceLine to destLine. Replace &lt;sourceLine&gt; and &lt;destLine&gt; with the appropriate line numbers.
+/:&lt;search&gt; - Start searching for &lt;search&gt; text in the document.
+:r &lt;search&gt; &lt;replace&gt; - Replace occurrences of &lt;search&gt; with &lt;replace&gt; text in the document.
+:clean - Remove all empty lines from the text.
+:insert &lt;lineNumber&gt; &lt;text&gt; - Insert a new line with the specified text at lineNumber. Replace &lt;lineNumber&gt; with the line number and &lt;text&gt; with the content.
+:remove &lt;lineNumber&gt; - Remove the line at lineNumber. Replace &lt;lineNumber&gt; with the line number.
+:timestamp - Insert the current timestamp at the cursor's position.
+:outdent &lt;spaces&gt; - Outdent lines by the specified number of spaces. Replace &lt;spaces&gt; with the number of spaces.
+:paste &lt;lineNumber&gt; - Paste the clipboard content at the specified lineNumber. Replace &lt;lineNumber&gt; with the line number.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

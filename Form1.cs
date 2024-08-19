@@ -1,9 +1,13 @@
-﻿using System.Drawing.Drawing2D;
+﻿using System.Diagnostics;
+using System.Drawing.Drawing2D;
+using System.Text;
+using System.Windows.Forms;
 
 namespace VimPig
 {
     public partial class Form1 : Form
     {
+        private List<string> commandHistory = new List<string>();
         private string currentFilePath = string.Empty; // Путь к открытому файлу
         public static bool isCommandMode = false; // Режим командной строки
         private string lastSearchTerm = string.Empty; // Последний поисковый запрос
@@ -131,6 +135,7 @@ namespace VimPig
             UpdateStatus();
 
         }
+
         private void UpdateStattocomm()
         {
             RPC.SetState("Writing Commands..", true);
@@ -189,6 +194,7 @@ namespace VimPig
         }
         private void ExecuteCommand(string command)
         {
+            commandHistory.Add(command);
             command = command.Trim();
             if (command == ":w")
             {
@@ -203,32 +209,75 @@ namespace VimPig
                 SaveFile();
                 Application.Exit();
             }
-            else if (command.StartsWith(":e "))
+            else if (command == ":e")
             {
-                // Получаем путь к файлу, начиная с 3-го символа, и удаляем лишние пробелы.
-                string filePath = command.Substring(4).Trim();
+                OpenSpecificFile();
+            }
 
-                // Проверка, есть ли аргумент после ":e ".
-                if (!string.IsNullOrEmpty(filePath))
+            else if (command.StartsWith(":delete "))
+            {
+                if (int.TryParse(command.Substring(8).Trim(), out int lineNumber))
                 {
-                    try
-                    {
-                        // Открываем указанный файл.
-                        OpenSpecificFile(filePath);
-                    }
-                    catch (Exception ex)
-                    {
-                        // Если произошла ошибка при открытии файла, отображаем сообщение с описанием ошибки.
-                        MessageBox.Show($"Failed to open file: {ex.Message}");
-                    }
+                    DeleteSpecificLine(lineNumber);
                 }
                 else
                 {
-                    // Если аргумент не указан, отображаем сообщение о необходимости указания пути к файлу.
-                    MessageBox.Show("Error: Missing file path. Please provide a valid file path after the :e command.");
+                    MessageBox.Show("Invalid line number.");
+                }
+            }
+            else if (command.StartsWith(":script"))
+            {
+                ExecuteScript();
+            }
+            else if (command == ":history")
+            {
+                MessageBox.Show(string.Join("\n", commandHistory), "Command History");
+            }
+
+            else if (command.StartsWith(":shell "))
+            {
+                string shellCommand = command.Substring(7).Trim();
+                ExecuteShellCommand(shellCommand);
+            }
+            else if (command.StartsWith(":uppercase "))
+            {
+                if (int.TryParse(command.Substring(11).Trim(), out int lineNumber))
+                {
+                    UppercaseLine(lineNumber);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid line number.");
                 }
             }
 
+            else if (command == ":clear")
+            {
+                textBox1.Clear();
+                MessageBox.Show("All text cleared.");
+            }
+            else if (command.StartsWith(":lowercase "))
+            {
+                if (int.TryParse(command.Substring(11).Trim(), out int lineNumber))
+                {
+                    LowercaseLine(lineNumber);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid line number.");
+                }
+            }
+            else if (command.StartsWith(":copy "))
+            {
+                if (int.TryParse(command.Substring(6).Trim(), out int lineNumber))
+                {
+                    CopyLineToClipboard(lineNumber);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid line number.");
+                }
+            }
 
             else if (command == ":dd")
             {
@@ -246,6 +295,40 @@ namespace VimPig
             {
                 MoveToEnd();
             }
+            else if (command.StartsWith(":uncomment "))
+            {
+                if (int.TryParse(command.Substring(11).Trim(), out int lineNumber))
+                {
+                    UncommentLine(lineNumber);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid line number.");
+                }
+            }
+            else if (command.StartsWith(":comment "))
+            {
+                if (int.TryParse(command.Substring(9).Trim(), out int lineNumber))
+                {
+                    CommentLine(lineNumber);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid line number.");
+                }
+            }
+            else if (command.StartsWith(":move "))
+            {
+                var parts = command.Split(' ', 3);
+                if (parts.Length == 3 && int.TryParse(parts[1], out int sourceLine) && int.TryParse(parts[2], out int destLine))
+                {
+                    MoveLine(sourceLine, destLine);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid command syntax.");
+                }
+            }
             else if (command.StartsWith("/:"))
             {
                 StartSearch(command.Substring(2));
@@ -254,9 +337,267 @@ namespace VimPig
             {
                 ReplaceText(command.Substring(3));
             }
+            else if (command == ":clean")
+            {
+                CleanEmptyLines();
+            }
+            else if (command.StartsWith(":insert "))
+            {
+                var parts = command.Split(' ', 3);
+                if (parts.Length == 3 && int.TryParse(parts[1], out int lineNumber))
+                {
+                    InsertLine(lineNumber, parts[2]);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid command syntax.");
+                }
+            }
+
+            else if (command.StartsWith(":remove "))
+            {
+                if (int.TryParse(command.Substring(8).Trim(), out int lineNumber))
+                {
+                    RemoveLine(lineNumber);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid line number.");
+                }
+            }
+            else if (command == ":timestamp")
+            {
+                InsertTimestamp();
+            }
+            else if (command.StartsWith(":outdent "))
+            {
+                if (int.TryParse(command.Substring(9).Trim(), out int spaces))
+                {
+                    OutdentLines(spaces);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid number of spaces.");
+                }
+            }
+            else if (command.StartsWith(":paste "))
+            {
+                if (int.TryParse(command.Substring(7).Trim(), out int lineNumber))
+                {
+                    PasteClipboardToLine(lineNumber);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid line number.");
+                }
+            }
             else
             {
                 MessageBox.Show("Unknown command or not enought arguments: " + command);
+            }
+        }
+        private void OutdentLines(int spaces)
+        {
+            var lines = textBox1.Lines;
+            var indent = new string(' ', spaces);
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (lines[i].StartsWith(indent))
+                {
+                    lines[i] = lines[i].Substring(indent.Length);
+                }
+            }
+            textBox1.Lines = lines;
+            MessageBox.Show($"Outdented lines by {spaces} spaces.");
+        }
+
+        private void CleanEmptyLines()
+        {
+            var lines = textBox1.Lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
+            textBox1.Lines = lines;
+            MessageBox.Show("Removed empty lines.");
+        }
+
+
+        private void InsertTimestamp()
+        {
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            int cursorPosition = textBox1.SelectionStart;
+            textBox1.Text = textBox1.Text.Insert(cursorPosition, timestamp);
+            textBox1.SelectionStart = cursorPosition + timestamp.Length;
+        }
+        private void InsertLine(int lineNumber, string text)
+        {
+            if (lineNumber >= 1 && lineNumber <= textBox1.Lines.Length + 1)
+            {
+                var lines = textBox1.Lines.ToList();
+                lines.Insert(lineNumber - 1, text);
+                textBox1.Lines = lines.ToArray();
+                MessageBox.Show("Text inserted.");
+            }
+            else
+            {
+                MessageBox.Show("Line number out of range.");
+            }
+        }
+        private void MoveLine(int sourceLine, int destLine)
+        {
+            if (sourceLine >= 1 && sourceLine <= textBox1.Lines.Length && destLine >= 1 && destLine <= textBox1.Lines.Length + 1)
+            {
+                var lines = textBox1.Lines.ToList();
+                var line = lines[sourceLine - 1];
+                lines.RemoveAt(sourceLine - 1);
+                lines.Insert(destLine - 1, line);
+                textBox1.Lines = lines.ToArray();
+                MessageBox.Show("Line moved.");
+            }
+            else
+            {
+                MessageBox.Show("Line number out of range.");
+            }
+        }
+        private void RemoveLine(int lineNumber)
+        {
+            if (lineNumber >= 1 && lineNumber <= textBox1.Lines.Length)
+            {
+                var lines = textBox1.Lines.ToList();
+                lines.RemoveAt(lineNumber - 1);
+                textBox1.Lines = lines.ToArray();
+                MessageBox.Show("Line removed.");
+            }
+            else
+            {
+                MessageBox.Show("Line number out of range.");
+            }
+        }
+        private void UncommentLine(int lineNumber)
+        {
+            if (lineNumber >= 1 && lineNumber <= textBox1.Lines.Length)
+            {
+                var lines = textBox1.Lines.ToList();
+                if (lines[lineNumber - 1].StartsWith("// "))
+                {
+                    lines[lineNumber - 1] = lines[lineNumber - 1].Substring(3);
+                    textBox1.Lines = lines.ToArray();
+                    MessageBox.Show("Line uncommented.");
+                }
+                else
+                {
+                    MessageBox.Show("Line is not commented.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Line number out of range.");
+            }
+        }
+        private void CommentLine(int lineNumber)
+        {
+            if (lineNumber >= 1 && lineNumber <= textBox1.Lines.Length)
+            {
+                var lines = textBox1.Lines.ToList();
+                lines[lineNumber - 1] = "// " + lines[lineNumber - 1];
+                textBox1.Lines = lines.ToArray();
+                MessageBox.Show("Line commented.");
+            }
+            else
+            {
+                MessageBox.Show("Line number out of range.");
+            }
+        }
+        private void PasteClipboardToLine(int lineNumber)
+        {
+            if (lineNumber >= 1 && lineNumber <= textBox1.Lines.Length)
+            {
+                var lines = textBox1.Lines.ToList();
+                lines.Insert(lineNumber - 1, Clipboard.GetText());
+                textBox1.Lines = lines.ToArray();
+            }
+            else
+            {
+                MessageBox.Show("Line number out of range.");
+            }
+        }
+        private void UppercaseLine(int lineNumber)
+        {
+            if (lineNumber >= 1 && lineNumber <= textBox1.Lines.Length)
+            {
+                var lines = textBox1.Lines.ToList();
+                lines[lineNumber - 1] = lines[lineNumber - 1].ToUpper();
+                textBox1.Lines = lines.ToArray();
+                MessageBox.Show("Line converted to uppercase.");
+            }
+            else
+            {
+                MessageBox.Show("Line number out of range.");
+            }
+        }
+        private void CopyLineToClipboard(int lineNumber)
+        {
+            if (lineNumber >= 1 && lineNumber <= textBox1.Lines.Length)
+            {
+                Clipboard.SetText(textBox1.Lines[lineNumber - 1]);
+                MessageBox.Show("Line copied to clipboard.");
+            }
+            else
+            {
+                MessageBox.Show("Line number out of range.");
+            }
+        }
+        private void LowercaseLine(int lineNumber)
+        {
+            if (lineNumber >= 1 && lineNumber <= textBox1.Lines.Length)
+            {
+                var lines = textBox1.Lines.ToList();
+                lines[lineNumber - 1] = lines[lineNumber - 1].ToLower();
+                textBox1.Lines = lines.ToArray();
+                MessageBox.Show("Line converted to lowercase.");
+            }
+            else
+            {
+                MessageBox.Show("Line number out of range.");
+            }
+        }
+        private void DeleteSpecificLine(int lineNumber)
+        {
+            if (lineNumber >= 1 && lineNumber <= textBox1.Lines.Length)
+            {
+                var lines = textBox1.Lines.ToList();
+                lines.RemoveAt(lineNumber - 1);
+                textBox1.Lines = lines.ToArray();
+            }
+            else
+            {
+                MessageBox.Show("Line number out of range.");
+            }
+        }
+        private void ExecuteShellCommand(string shellCommand)
+        {
+            try
+            {
+                var processInfo = new ProcessStartInfo("cmd.exe", "/c " + shellCommand)
+                {
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+
+                var process = Process.Start(processInfo);
+                process.WaitForExit();
+
+                string output = process.StandardOutput.ReadToEnd();
+                string error = process.StandardError.ReadToEnd();
+
+                if (!string.IsNullOrEmpty(output))
+                    MessageBox.Show(output);
+                if (!string.IsNullOrEmpty(error))
+                    MessageBox.Show("Error: " + error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Shell command execution failed: " + ex.Message);
             }
         }
 
@@ -279,19 +620,67 @@ namespace VimPig
                 }
             }
         }
-
-        private void OpenSpecificFile(string filePath)
+        private void ExecuteScript()
         {
-            if (File.Exists(filePath))
+            try
             {
-                currentFilePath = filePath;
-                textBox1.Text = File.ReadAllText(currentFilePath);
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                {
+                    openFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+                    openFileDialog.Title = "Select a Script File";
+
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        string scriptPath = openFileDialog.FileName;
+
+                        // Чтение и выполнение команд из выбранного файла
+                        string[] commands = File.ReadAllLines(scriptPath);
+
+                        foreach (string cmd in commands)
+                        {
+                            ExecuteCommand(cmd.Trim());
+                        }
+
+                        MessageBox.Show("Script executed successfully.");
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("File not found: " + filePath);
+                MessageBox.Show("Error executing script: " + ex.Message);
             }
         }
+
+        private void OpenSpecificFile()
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                // Устанавливаем фильтр, чтобы показывать только текстовые файлы.
+                openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+                openFileDialog.Title = "Open Text File";
+                UpdateStatt();
+
+                // Если пользователь выбрал файл и нажал "Открыть"
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    UpdateStattocomm();
+                    UpdateStatus();
+                    currentFilePath = openFileDialog.FileName;
+                    textBox1.Text = File.ReadAllText(currentFilePath);
+                }
+                else
+                {
+                    UpdateStattocomm();
+                    UpdateStatus();
+                    MessageBox.Show("No file selected.");
+                }
+            }
+        }
+        public void UpdateStatt()
+        {
+            RPC.SetState("Choosing File..", true);
+        }
+
 
         private void DeleteCurrentLine()
         {

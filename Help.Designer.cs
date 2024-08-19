@@ -39,9 +39,9 @@
             // 
             label1.Font = new Font("Segoe UI", 15F);
             label1.ForeColor = SystemColors.Control;
-            label1.Location = new Point(27, 11);
+            label1.Location = new Point(3, 6);
             label1.Name = "label1";
-            label1.Size = new Size(546, 37);
+            label1.Size = new Size(787, 37);
             label1.TabIndex = 0;
             label1.Text = "Editor Help";
             label1.TextAlign = ContentAlignment.TopCenter;
@@ -53,17 +53,16 @@
             panel1.Controls.Add(label1);
             panel1.Location = new Point(12, 12);
             panel1.Name = "panel1";
-            panel1.Size = new Size(619, 261);
+            panel1.Size = new Size(793, 438);
             panel1.TabIndex = 5;
             // 
             // label2
             // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 9F);
+            label2.Font = new Font("Segoe UI", 8F);
             label2.ForeColor = SystemColors.Control;
-            label2.Location = new Point(27, 48);
+            label2.Location = new Point(20, 43);
             label2.Name = "label2";
-            label2.Size = new Size(528, 165);
+            label2.Size = new Size(741, 383);
             label2.TabIndex = 0;
             label2.Text = resources.GetString("label2.Text");
             // 
@@ -72,14 +71,13 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(30, 30, 30);
-            ClientSize = new Size(643, 285);
+            ClientSize = new Size(817, 462);
             Controls.Add(panel1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Help";
             Text = "Help";
             KeyDown += Scintilla_KeyDown;
             panel1.ResumeLayout(false);
-            panel1.PerformLayout();
             ResumeLayout(false);
         }
 
