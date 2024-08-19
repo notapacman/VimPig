@@ -9,7 +9,7 @@ VimPig is a simple text editor inspired by Vim. It allows text editing using key
 - Search and Replace: Search for and replace text in the file.
 - File Saving and Opening: Open existing files and save current content.
 # Commands
-`:w` - Save the current file. If no file was opened, you will be prompted to choose a location to save.
+`:w` - Save the current file. If no file was opened, you will be prompted to choose a location to save.\n
 `:q` - Close the application.
 `:wq` - Save the current file and then close the application.
 `:e` - Open a file dialog for selecting a file to open.
